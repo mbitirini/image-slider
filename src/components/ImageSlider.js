@@ -54,10 +54,6 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
     // Clear the canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Fill background
-    context.fillStyle = 'rgb(242, 242, 242)';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
     imagesRef.current.forEach((img, index) => {
       const imageX = (index * containerWidth + offsetX) % totalImagesWidth;
 
