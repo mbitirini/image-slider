@@ -20,14 +20,6 @@ Install dependencies:
 npm install
 ```
 
-## Usage
-
-Run the project:
-
-```bash
-npm start
-```
-
 ## Running the Built Release
 
 ### Prerequisites
