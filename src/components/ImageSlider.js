@@ -141,7 +141,18 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
       }
     };
 
-    loadImages();
+    // Asynchronously load images and set up event listeners
+    const init = async () => {
+      await loadImages();
+
+      // Event listeners
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('mousemove', handleMouseMove);
+      canvas.addEventListener('mouseup', handleMouseUp);
+      canvas.addEventListener('mouseleave', handleMouseUp);
+    };
+
+    init();
 
     // Event listeners
     canvas.addEventListener('mousedown', handleMouseDown);
