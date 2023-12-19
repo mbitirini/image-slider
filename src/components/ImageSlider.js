@@ -89,13 +89,9 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
     setDragging(false);
   };
 
-  // Set up event listeners and load images on component mount
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    contextRef.current = canvas.getContext('2d');
-
-    // Handles the mouse move event during dragging, updating the offset and redrawing images.
-    const handleMouseMove = (e) => {
+  // Handles the mouse move event during dragging, updating the offset and redrawing images.
+  const handleMouseMove = useCallback(
+    (e) => {
       if (isDragging) {
         const x = e.clientX;
         const dx = x - startX;
@@ -113,7 +109,14 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
         drawImage();
         setStartX(x);
       }
-    };
+    },
+    [isDragging, startX, fixedCanvasWidth, offsetX, drawImage]
+  );
+
+  // Set up event listeners and load images on component mount
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    contextRef.current = canvas.getContext('2d');
 
     /**
      * Asynchronously loads images, sets up canvas dimensions, adjusts image sizes,
@@ -157,14 +160,11 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
       canvas.removeEventListener('mouseleave', handleMouseUp);
     };
   }, [
-    isDragging,
-    images,
-    fixedCanvasWidth,
-    setCanvasDimensions,
     adjustImageSizes,
     drawImage,
-    startX,
-    offsetX,
+    handleMouseMove,
+    images,
+    setCanvasDimensions,
   ]);
 
   // Reset offsetX on mount
