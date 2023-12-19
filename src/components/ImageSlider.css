@@ -1,0 +1,15 @@
+.image_slider {
+  margin: 8px 0;
+  display: block;
+  outline: 1px solid #ccc;
+  position: relative;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.image_slider.drag-active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
