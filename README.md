@@ -65,4 +65,3 @@ npm run build
 #### Notes
 
 - Decided to use the images provided in the description but tested it with different set of images as well and works as expected
-- Netlify deploy link: https://benevolent-blancmange-d86b22.netlify.app/
