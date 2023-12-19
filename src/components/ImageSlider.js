@@ -6,13 +6,15 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
   const canvasRef = useRef(null);
   const imagesRef = useRef([]);
 
+  // Ref for storing loaded images
+  const contextRef = useRef(null);
+
   // State for tracking drag interaction
   const [isDragging, setDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [offsetX, setOffsetX] = useState(0);
 
-  // Ref for storing loaded images
-  const contextRef = useRef(null);
+  const [initialSetupDone, setInitialSetupDone] = useState(false);
 
   // Function to set canvas dimensions
   const setCanvasDimensions = useCallback(() => {
@@ -51,10 +53,6 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
 
     // Clear the canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Fill background
-    context.fillStyle = 'rgb(242, 242, 242)';
-    context.fillRect(0, 0, canvas.width, canvas.height);
 
     imagesRef.current.forEach((img, index) => {
       const imageX = (index * containerWidth + offsetX) % totalImagesWidth;
@@ -113,39 +111,15 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
     [isDragging, startX, fixedCanvasWidth, offsetX, drawImage]
   );
 
-  // Set up event listeners and load images on component mount
+  // Set up event listeners on component mount
   useEffect(() => {
     const canvas = canvasRef.current;
     contextRef.current = canvas.getContext('2d');
 
-    /**
-     * Asynchronously loads images, sets up canvas dimensions, adjusts image sizes,
-     * and draws images on the canvas.
-     */
-    const loadImages = async () => {
-      try {
-        const loadedImages = await Promise.all(
-          images.map((path) => {
-            return new Promise((resolve, reject) => {
-              const img = new Image();
-              img.onload = () => resolve(img);
-              img.onerror = (error) => reject(error);
-              img.src = path;
-            });
-          })
-        );
-
-        imagesRef.current = loadedImages;
-        setCanvasDimensions();
-        adjustImageSizes();
-        drawImage();
-      } catch (error) {
-        console.error('Error loading images:', error);
-      }
-    };
-
-    loadImages();
-
+    if (!initialSetupDone) {
+      setCanvasDimensions();
+      setInitialSetupDone(true);
+    }
     // Event listeners
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mousemove', handleMouseMove);
@@ -159,13 +133,38 @@ const ImageSlider = ({ fixedCanvasWidth, fixedCanvasHeight, images }) => {
       canvas.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('mouseleave', handleMouseUp);
     };
-  }, [
-    adjustImageSizes,
-    drawImage,
-    handleMouseMove,
-    images,
-    setCanvasDimensions,
-  ]);
+  }, [handleMouseMove, initialSetupDone, setCanvasDimensions]);
+
+  useEffect(() => {
+    if (initialSetupDone) {
+      /**
+       * Asynchronously loads images, sets up canvas dimensions, adjusts image sizes,
+       * and draws images on the canvas.
+       */
+      const loadImages = async () => {
+        try {
+          const loadedImages = await Promise.all(
+            images.map((path) => {
+              return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = (error) => reject(error);
+                img.src = path;
+              });
+            })
+          );
+
+          imagesRef.current = loadedImages;
+          adjustImageSizes();
+          drawImage();
+        } catch (error) {
+          console.error('Error loading images:', error);
+        }
+      };
+
+      loadImages();
+    }
+  }, [images, initialSetupDone, adjustImageSizes, drawImage]);
 
   // Reset offsetX on mount
   useEffect(() => {
