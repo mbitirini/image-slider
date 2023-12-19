@@ -65,4 +65,4 @@ npm run build
 #### Notes
 
 - Decided to use the images provided in the description but tested it with different set of images as well and works as expected
-- Deployment link: https://image-slider-3zqzbrqx3-mbitirini.vercel.app/
+- Deployment link: https://image-slider-kappa.vercel.app/
