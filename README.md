@@ -1,6 +1,7 @@
-# Publitas Frontend Code Challenge
+# Image Slider with React hooks
 
 Image slider that lets you drag to change images in React, rendered in a single canvas element
+Made with React Hooks
 
 ### Browser Compatibility
 
@@ -64,5 +65,4 @@ npm run build
 
 #### Notes
 
-- Decided to use the images provided in the description but tested it with different set of images as well and works as expected
 - Deployment link: https://image-slider-kappa.vercel.app/
