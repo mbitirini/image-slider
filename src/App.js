@@ -12,9 +12,6 @@ function App() {
 
   return (
     <div className='App'>
-      <header>
-        <h1>Publitas Frontend Code Challenge</h1>
-      </header>
       <section className='slider_container'>
         <ImageSlider
           fixedCanvasWidth={fixedCanvasWidth}
